@@ -1,0 +1,33 @@
+# validatingwebhook.yaml
+kind: ValidatingWebhookConfiguration
+apiVersion: admissionregistration.k8s.io/v1
+metadata:
+  name: aip-volcano-admission
+webhooks:
+  - name: val-webhook.hae.com
+    rules:
+      - operations: ["CREATE", "UPDATE"]
+        apiGroups: ["*"]
+        apiVersions: ["v1"]
+        resources: ["pods"]
+        scope: "Namespaced"
+      - operations: ["CREATE"]
+        apiGroups: ["Scheduling.volcano.sh"]
+        apiVersions: ["v1beta1"]
+        resources: ["PodGroup"]
+        scope: "Namespaced"
+    namespaceSelector:
+      matchExpressions:
+        - key: app.kubernetes.io/part-of
+          operator: In
+          values:
+            - kubeflow-profile
+    clientConfig:
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURHVENDQWdHZ0F3SUJBZ0lVV2kwNzlkeGVvZlpCU0ZieU81ejI5RkZBRER3d0RRWUpLb1pJaHZjTkFRRUwKQlFBd0d6RVpNQmNHQTFVRUF3d1FRVWxRSUVGa2JXbHpjMmx2YmlCRFFUQWdGdzB5TXpBM01USXdOelE0TlRWYQpHQTh5TWprM01EUXlOakEzTkRnMU5Wb3dHekVaTUJjR0ExVUVBd3dRUVVsUUlFRmtiV2x6YzJsdmJpQkRRVENDCkFTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBTjZmRFhUbU1OT2ZXaXdqUE8vWmYwUVoKUkRWSVJyUUdVb0lCcXcwZ0VrVm5LbWJDSS9zR0h2RTRCWDZ3Q3dyV2RWZGliTHBqeDNpRFFaNk1uU2lrYlpLVwpyL1NNN0tRRVZQSnNoRkhCVXhwNXUxNktVZHFubTFZY00yNnl1WStqUnRPWTkwNUdKSTFDZWhOR2NNcnJHWFEzClVCM2JFMTduTDBwdlQxdUZHUjRkeE9GeEtJTzJDK2F4UEMwaXRIMHNJa0NTbS83L3BtQTlWUW5mbjRQYXJjNmYKVmVDQitzZi9YN2FxclFVNlhCb0ZmZkE0RCt4Q3c3WUh3S0pkMW8yckl3Ti8wS2RPSVlGY2QwTlNTdEdCaFZCUwp3OEhnRnh5TVNuK3dTRS9DeUtIdzVTS1pCK2xjc3RCZmdZcmlaYVNPSU9ZdVY5V3o0SUovOCtJR1IvdXdOVk1DCkF3RUFBYU5UTUZFd0hRWURWUjBPQkJZRUZESmJqNk5MdVI1cjdsU21NeEJYaGRrT0lQODZNQjhHQTFVZEl3UVkKTUJhQUZESmJqNk5MdVI1cjdsU21NeEJYaGRrT0lQODZNQThHQTFVZEV3RUIvd1FGTUFNQkFmOHdEUVlKS29aSQpodmNOQVFFTEJRQURnZ0VCQUo3cFJNaHZyNUxoVDE5L2Z1UE5TV0pSMDhzc0NpNmIrQ3ByMjhEUlk4N0Jlb1Y2ClErRTFJVHNoNFB2VU1tcjlHUTAwdkdMYm5QS0UwYWpaSExXRzdnSlVrTklVYzYzaVE4YUxkMWkxTzBaT0tvbE4KQytwc3NDaDRuRmxrL3pVMEpZMUpveHlkaFgwNGhHbVg5SXBKbGZ5TDBsUmtqbit0UzA2SlAxVnFxWVY1Vng5Ugp2RmZ1cDJ2SlVDNHVrNnVJYmxJWi83Qk9TamZIWDJpMmFxazl6aktJTkxBWmlPa3pIZ0MrbW1mU1hlMGhGeWsrCi9yRW1XNUd5VnhXSFNDNm5oY3BCZ3hqd3ZQbjA3SVhna0twaEhzYmpWUXRzajFjaGtUQnc4OXdseUUyNnpTb2sKa2oxZlhzZVNTYnFodkZENGR1emY2ak9weFBFcm05WFhBVXBDTDdvPQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+      service:
+        namespace: aip-system
+        name: aip-volcano-admission
+        path: /pod
+    admissionReviewVersions: ["v1"]
+    sideEffects: NoneOnDryRun
+    timeoutSeconds: 5

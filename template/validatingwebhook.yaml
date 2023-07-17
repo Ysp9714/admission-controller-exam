@@ -1,0 +1,33 @@
+# validatingwebhook.yaml
+kind: ValidatingWebhookConfiguration
+apiVersion: admissionregistration.k8s.io/v1
+metadata:
+  name: PODNAME
+webhooks:
+  - name: val-webhook.hae.com
+    rules:
+      - operations: ["CREATE", "UPDATE"]
+        apiGroups: ["*"]
+        apiVersions: ["v1"]
+        resources: ["pods"]
+        scope: "Namespaced"
+      - operations: ["CREATE"]
+        apiGroups: ["Scheduling.volcano.sh"]
+        apiVersions: ["v1beta1"]
+        resources: ["PodGroup"]
+        scope: "Namespaced"
+    namespaceSelector:
+      matchExpressions:
+        - key: app.kubernetes.io/part-of
+          operator: In
+          values:
+            - kubeflow-profile
+    clientConfig:
+      caBundle: CA_PEM_BASE64
+      service:
+        namespace: NAMESPACE
+        name: PODNAME
+        path: /pod
+    admissionReviewVersions: ["v1"]
+    sideEffects: NoneOnDryRun
+    timeoutSeconds: 5

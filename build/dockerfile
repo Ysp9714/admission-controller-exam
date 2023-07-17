@@ -1,0 +1,12 @@
+FROM python:3.8
+COPY build/requirements.txt requirements.txt
+RUN pip install -r requirements.txt 
+
+WORKDIR /app
+ADD build/pkg /app
+ADD cert/server.key .
+ADD cert/server.crt .
+ADD cert/ca.crt .
+
+
+CMD ["python", "-u", "main.py"]

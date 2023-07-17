@@ -1,0 +1,25 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: aip-volcano-admission
+  namespace: aip-system
+spec:
+  selector:
+    webhook: aip-volcano-admission
+  ports:
+    - name: https
+      protocol: TCP
+      port: 443
+      targetPort: 5000
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: aip-volcano-admission
+  namespace: aip-system
+  labels:
+    webhook: aip-volcano-admission
+spec:
+  containers:
+    - name: webhook
+      image: ysp9714/admission-mutate-exam:0.0.57

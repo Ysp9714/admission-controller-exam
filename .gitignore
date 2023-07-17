@@ -1,0 +1,6 @@
+.vscode
+*/__pycache__
+*.crt
+*.key
+*.srl
+*.csr

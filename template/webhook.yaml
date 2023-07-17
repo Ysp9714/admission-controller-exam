@@ -1,0 +1,25 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: PODNAME
+  namespace: NAMESPACE
+spec:
+  selector:
+    webhook: PODNAME
+  ports:
+    - name: https
+      protocol: TCP
+      port: 443
+      targetPort: 5000
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: PODNAME
+  namespace: NAMESPACE
+  labels:
+    webhook: PODNAME
+spec:
+  containers:
+    - name: webhook
+      image: ADMISSION_IMAGE_NAME:ADMISSION_IMAGE_TAG

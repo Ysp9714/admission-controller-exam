@@ -1,0 +1,25 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: PODNAME
+webhooks:
+  - name: val-webhook.hae.com
+    clientConfig:
+      service:
+        namespace: NAMESPACE
+        name: PODNAME
+        path: "/pod/mutate"
+      caBundle: CA_PEM_BASE64
+    rules:
+      - operations: ["CREATE", "UPDATE"]
+        apiGroups: [""]
+        apiVersions: ["v1"]
+        resources: ["pods"]
+    namespaceSelector:
+      matchExpressions:
+        - key: app.kubernetes.io/part-of
+          operator: In
+          values:
+            - kubeflow-profile
+    admissionReviewVersions: ["v1"]
+    sideEffects: NoneOnDryRun
